@@ -1,5 +1,9 @@
 # Ashutosh Dubey - Portfolio
 
+🌐 **Live Demo:** [https://ashutosh-dubey-portfolio.vercel.app](https://ashutosh-dubey-portfolio.vercel.app)
+
+---
+
 Personal portfolio website built with Next.js, TailwindCSS, and Framer Motion.
 
 ## Tech Stack
@@ -24,9 +28,3 @@ Open [http://localhost:3000](http://localhost:3000) to view the portfolio.
 npm run build
 npm run start
 ```
-
-## Deploy
-
-Deploy to Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
