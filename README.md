@@ -2,13 +2,18 @@
 
 **Live:** [https://ashutosh-dubey-portfolio.vercel.app](https://ashutosh-dubey-portfolio.vercel.app)
 
-Personal portfolio for Ashutosh Dubey — Software Engineer focused on distributed systems, Go, and real-time applications.
+Portfolio of Ashutosh Dubey — Engineer 1, Cloud at CrowdStrike, building distributed systems in Go.
+
+## Design
+
+*Ink on Porcelain* — a porcelain ground, sumi-ink type and a single cobalt "underglaze" accent.
+Instrument Serif for display, Geist for text, smooth scrolling via Lenis and Framer Motion.
 
 ## Stack
 
 - Next.js (App Router)
-- Tailwind CSS
-- Framer Motion
+- Tailwind CSS v4
+- Framer Motion + Lenis
 - TypeScript
 
 ## Develop
@@ -18,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). All content lives in `lib/data.ts`.
 
 ## Build
 

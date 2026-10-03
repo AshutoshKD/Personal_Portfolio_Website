@@ -1,130 +1,185 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { personalInfo } from "@/lib/data";
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { Mask } from "./Reveal";
+import { site } from "@/lib/data";
 
-export function Hero() {
-  const socials = [
-    { name: "GitHub", url: personalInfo.github },
-    { name: "LinkedIn", url: personalInfo.linkedin },
-    { name: "LeetCode", url: personalInfo.leetcode },
-  ];
+function LocalTime() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const format = () =>
+      new Intl.DateTimeFormat("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: site.timezone,
+      }).format(new Date());
+    const first = setTimeout(() => setTime(format()), 0);
+    const id = setInterval(() => setTime(format()), 30_000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(id);
+    };
+  }, []);
+
+  return <span className="tabular-nums">{time ? `${time} IST` : "\u00A0"}</span>;
+}
+
+/** A hand-drawn ink circle (ensō) that draws itself, then breathes with the cursor. */
+function Enso() {
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 40, damping: 18 });
+  const sy = useSpring(my, { stiffness: 40, damping: 18 });
+  const x = useTransform(sx, (v) => v * 26);
+  const y = useTransform(sy, (v) => v * 26);
+
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      mx.set(e.clientX / window.innerWidth - 0.5);
+      my.set(e.clientY / window.innerHeight - 0.5);
+    };
+    window.addEventListener("pointermove", move);
+    return () => window.removeEventListener("pointermove", move);
+  }, [mx, my]);
+
+  const draw = (delay: number, duration: number) => ({
+    initial: { pathLength: 0, opacity: 0 },
+    animate: { pathLength: 1, opacity: 1 },
+    transition: {
+      pathLength: { duration, delay, ease: [0.65, 0, 0.35, 1] as const },
+      opacity: { duration: 0.2, delay },
+    },
+  });
 
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0 atmosphere" />
-      <div className="absolute inset-0 topo-grid" />
+    <motion.div
+      aria-hidden
+      style={{ x, y }}
+      className="pointer-events-none absolute -right-[12vw] top-[7vh] w-[min(88vw,760px)] md:-right-[2vw] md:top-[9vh]"
+    >
+      <svg viewBox="0 0 600 600" className="h-auto w-full overflow-visible text-ink">
+        <defs>
+          <filter id="brush" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="7" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="16" />
+          </filter>
+          <filter id="dry" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="g" />
+            <feDisplacementMap in="SourceGraphic" in2="g" scale="5" />
+          </filter>
+        </defs>
+        <g filter="url(#brush)" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+          <motion.path
+            d="M 452 108 C 566 188 590 366 478 470 C 368 572 160 560 92 402 C 28 252 128 78 304 56 C 392 46 462 78 498 128"
+            strokeWidth={34}
+            {...draw(0.5, 2.4)}
+          />
+          <g filter="url(#dry)" opacity={0.55}>
+            <motion.path
+              d="M 440 100 C 560 176 584 372 470 478 C 360 578 150 566 80 402 C 14 250 124 66 304 44"
+              strokeWidth={13}
+              {...draw(0.55, 2.3)}
+            />
+          </g>
+        </g>
+        {/* the seal */}
+        <motion.g
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 3.0, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformOrigin: "532px 540px" }}
+        >
+          <rect x="500" y="508" width="64" height="64" rx="4" fill="#2a46a3" />
+          <text
+            x="532"
+            y="553"
+            textAnchor="middle"
+            fontSize="38"
+            fill="#f5f3ee"
+            style={{ fontFamily: "var(--font-instrument)", fontStyle: "italic" }}
+          >
+            AD
+          </text>
+        </motion.g>
+      </svg>
+    </motion.div>
+  );
+}
 
-      <div className="relative z-10 min-h-screen grid lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 xl:px-20 py-28 lg:py-24">
+export function Hero() {
+  return (
+    <section id="top" className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-6 pb-10 pt-32 md:px-12">
+      {/* soft glaze */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-[10%] top-[12%] h-[70vh] w-[70vh] rounded-full opacity-70 blur-3xl"
+        style={{
+          background: "radial-gradient(closest-side, rgba(42,70,163,0.13), transparent)",
+          animation: "drift 18s ease-in-out infinite",
+        }}
+      />
+      <Enso />
+
+      <div className="relative z-10 mx-auto w-full max-w-[1440px]">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.4 }}
+          className="mb-8 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft md:mb-12"
+        >
+          Portfolio — {new Date().getFullYear()}
+        </motion.p>
+
+        <h1 className="font-serif text-[clamp(4.6rem,16.5vw,17rem)] leading-[0.84] tracking-[-0.035em]">
+          <Mask inView={false} delay={0.25}>
+            {site.first}
+          </Mask>
+          <Mask inView={false} delay={0.4} className="md:pl-[14vw]">
+            <span className="italic text-cobalt">{site.last}</span>
+          </Mask>
+        </h1>
+
+        <div className="mt-14 grid gap-10 border-t border-line pt-6 md:mt-20 md:grid-cols-12 md:gap-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 mb-8 w-fit"
+            transition={{ duration: 1, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.2em] text-ink-soft md:col-span-3"
           >
-            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse-dot" />
-            <span className="section-label">
-              {personalInfo.title} · {personalInfo.company}
-            </span>
+            <p className="text-ink">{site.role}</p>
+            <p>
+              {site.company} · {site.location.split(",")[0]}
+            </p>
+            <p className="mt-3 text-mist">
+              <LocalTime />
+            </p>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-[clamp(3.2rem,9vw,6.5rem)] font-extrabold leading-[0.95] tracking-tight text-[var(--text-primary)] mb-1"
-          >
-            {personalInfo.name}
-          </motion.h1>
-          <motion.h1
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-[clamp(3.2rem,9vw,6.5rem)] font-extrabold leading-[0.95] tracking-tight text-[var(--accent)] mb-8"
-          >
-            {personalInfo.lastName}
-          </motion.h1>
-
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.55 }}
-            className="max-w-md text-lg md:text-xl text-[var(--text-secondary)] mb-3"
+            transition={{ duration: 1, delay: 1.25, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-xl text-lg leading-snug text-ink-soft md:col-span-6 md:col-start-5 md:text-xl"
           >
-            {personalInfo.tagline}
+            {site.intro}
           </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45, duration: 0.55 }}
-            className="max-w-lg text-[var(--text-muted)] mb-10"
-          >
-            {personalInfo.bio}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55, duration: 0.55 }}
-            className="flex flex-wrap gap-3 mb-12"
-          >
-            <a href="#projects" className="cta-primary">
-              View Projects
-            </a>
-            <a href="#contact" className="cta-ghost">
-              Get in Touch
-            </a>
-          </motion.div>
-
-          <motion.div
+          <motion.a
+            href="#experience"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="flex flex-wrap items-center gap-x-6 gap-y-3"
+            transition={{ duration: 1, delay: 1.6 }}
+            className="hidden items-end justify-end gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-soft md:col-span-2 md:col-start-11 md:flex"
           >
-            {socials.map((s) => (
-              <a
-                key={s.name}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ink-link font-mono text-xs uppercase tracking-[0.18em]"
-              >
-                {s.name}
-              </a>
-            ))}
-            <span className="hidden sm:inline text-[var(--line-strong)]">/</span>
-            <span className="font-mono text-xs text-[var(--text-muted)]">{personalInfo.location}</span>
-          </motion.div>
+            Scroll
+            <span className="relative h-10 w-px overflow-hidden bg-line">
+              <span className="absolute inset-x-0 top-0 h-1/2 bg-ink" style={{ animation: "pulse-soft 2.4s ease-in-out infinite" }} />
+            </span>
+          </motion.a>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative min-h-[48vh] lg:min-h-screen border-t lg:border-t-0 lg:border-l border-[var(--line)]"
-        >
-          <Image
-            src="/profile.jpg"
-            alt="Ashutosh Dubey"
-            fill
-            priority
-            unoptimized
-            className="object-cover object-[center_20%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent lg:bg-gradient-to-r lg:from-[var(--bg-primary)]/35 lg:via-transparent lg:to-transparent" />
-        </motion.div>
       </div>
-
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ delay: 1, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute bottom-0 left-0 right-0 h-[2px] origin-left bg-gradient-to-r from-[var(--accent)] via-[var(--ember)] to-transparent"
-      />
     </section>
   );
 }

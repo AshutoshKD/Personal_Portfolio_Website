@@ -1,61 +1,58 @@
-import type { Metadata } from "next";
-import { Figtree, IBM_Plex_Mono, Syne } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { site } from "@/lib/data";
 
-const figtree = Figtree({
+const instrument = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-figtree",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument",
   display: "swap",
 });
 
-const syne = Syne({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-geist",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex",
+  variable: "--font-geist-mono",
   display: "swap",
 });
+
+const description =
+  "Ashutosh Dubey is a software engineer at CrowdStrike building distributed systems in Go.";
 
 export const metadata: Metadata = {
-  title: "Ashutosh Dubey | Software Engineer",
-  description:
-    "Software Engineer specializing in distributed systems, Go, and real-time applications. Currently at Netcore Cloud.",
-  keywords: [
-    "Software Engineer",
-    "Go",
-    "Distributed Systems",
-    "Backend Developer",
-    "WebRTC",
-    "Microservices",
-    "Ashutosh Dubey",
-  ],
-  authors: [{ name: "Ashutosh Dubey" }],
+  metadataBase: new URL(site.url),
+  title: "Ashutosh Dubey — Software Engineer",
+  description,
+  authors: [{ name: site.name }],
+  keywords: ["Ashutosh Dubey", "Software Engineer", "Go", "Distributed Systems", "CrowdStrike"],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Ashutosh Dubey | Software Engineer",
-    description:
-      "Software Engineer specializing in distributed systems, Go, and real-time applications.",
+    title: "Ashutosh Dubey — Software Engineer",
+    description,
     type: "website",
-    url: "https://ashutosh-dubey-portfolio.vercel.app",
+    url: site.url,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#f5f3ee",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${figtree.variable} ${syne.variable} ${plexMono.variable} antialiased`}
-      >
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en">
+      <body className={`${instrument.variable} ${geist.variable} ${geistMono.variable}`}>
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
