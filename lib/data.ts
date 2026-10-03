@@ -10,9 +10,14 @@ export const site = {
   email: "ashutosh.db.mail@gmail.com",
   resume: "/Ashutosh_Dubey_Resume.pdf",
   intro:
-    "I build the quiet, resilient backend systems that keep large platforms running — distributed, concurrent, and written in Go.",
+    "Every system hides a trade-off between load and latency. I find it before it finds you. Right now: building the internet of AI.",
   about:
-    "Two years in, I've gone from securing microservices to metering hundreds of millions of records a day. I like systems that stay calm under load, and code that's easy to explain.",
+    "I'm drawn to the moment a system strains — load rising, trade-offs surfacing, something about to give. I study that edge. Today it leads me to the internet of AI: securing agentic harnesses and connectors, and creating the agents that live there.",
+  now: [
+    "Building the internet of AI",
+    "Securing agentic harnesses & connectors",
+    "Creating agents",
+  ],
 };
 
 export const links = [

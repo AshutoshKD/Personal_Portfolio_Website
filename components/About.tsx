@@ -62,6 +62,31 @@ export function About() {
               );
             })}
           </p>
+
+          <Reveal delay={0.1} className="mt-14 md:mt-20">
+            <p className="mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
+              <span
+                className="h-1.5 w-1.5 rounded-full bg-cobalt"
+                style={{ animation: "pulse-soft 1.6s ease-in-out infinite" }}
+              />
+              Currently
+            </p>
+            <ul className="border-t border-line">
+              {site.now.map((item) => (
+                <li
+                  key={item}
+                  className="group flex items-center justify-between border-b border-line py-4 font-serif text-2xl tracking-[-0.01em] transition-colors duration-500 hover:text-cobalt md:text-3xl"
+                >
+                  <span className="transition-transform duration-700 ease-[var(--ease-silk)] group-hover:translate-x-2">
+                    {item}
+                  </span>
+                  <span className="font-sans text-base text-mist transition-all duration-700 ease-[var(--ease-silk)] group-hover:translate-x-1 group-hover:text-cobalt">
+                    →
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </div>
     </section>
