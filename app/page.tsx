@@ -8,33 +8,29 @@ import { Projects } from "@/components/Projects";
 import { Education } from "@/components/Education";
 import { Achievements } from "@/components/Achievements";
 import { Skills } from "@/components/Skills";
+import { Contact } from "@/components/Contact";
 import { personalInfo } from "@/lib/data";
 
 function Footer() {
   return (
-    <footer className="py-12 px-6">
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="h-[1px] bg-gradient-to-r from-transparent via-[var(--border)] to-transparent mb-8"
-        />
-        
-        <motion.div
+    <footer className="px-6 md:px-10 lg:px-16 pb-12">
+      <div className="max-w-6xl mx-auto border-t border-[var(--line)] pt-8 flex flex-col md:flex-row justify-between gap-4">
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row justify-between items-center gap-4"
+          className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-[0.16em]"
         >
-          <p className="text-xs text-[var(--text-dim)] uppercase tracking-[0.2em]">
-            © {new Date().getFullYear()} {personalInfo.name} {personalInfo.lastName}
-          </p>
-          <p className="text-xs text-[var(--text-dim)]">
-            Built with passion & coffee ☕
-          </p>
-        </motion.div>
+          © {new Date().getFullYear()} {personalInfo.name} {personalInfo.lastName}
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="font-mono text-xs text-[var(--text-dim)]"
+        >
+          Designed & built in Mumbai
+        </motion.p>
       </div>
     </footer>
   );
@@ -43,7 +39,6 @@ function Footer() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--bg-primary)] relative">
-      <div className="noise-bg" />
       <Navigation />
       <Hero />
       <Work />
@@ -51,6 +46,7 @@ export default function Home() {
       <Education />
       <Achievements />
       <Skills />
+      <Contact />
       <Footer />
     </main>
   );

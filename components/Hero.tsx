@@ -1,234 +1,130 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { personalInfo } from "@/lib/data";
 import Image from "next/image";
-
-function GridBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black_30%,transparent_100%)] opacity-20" />
-      
-      <motion.div
-        className="absolute top-1/3 left-1/3 w-[500px] h-[500px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, var(--accent-glow) 0%, transparent 60%)",
-        }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      
-      <motion.div
-        className="absolute bottom-1/3 right-1/3 w-[400px] h-[400px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 60%)",
-        }}
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.15, 0.3, 0.15],
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
-  );
-}
-
-function ProfilePicture() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
-      className="relative mb-10"
-    >
-      <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-[var(--border-light)] group">
-        <Image
-          src="/profile.jpg"
-          alt="Ashutosh Dubey"
-          fill
-          unoptimized
-          className="object-cover transition-transform duration-500 group-hover:scale-110 z-10"
-        />
-      </div>
-      
-      <motion.div
-        className="absolute -inset-2 rounded-full border border-[var(--border)] opacity-50"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
-      
-      <motion.div
-        className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[var(--accent-emerald)] border-4 border-[var(--bg-primary)] z-20"
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        title="Available for opportunities"
-      />
-    </motion.div>
-  );
-}
+import { personalInfo } from "@/lib/data";
 
 export function Hero() {
-  const firstName = personalInfo.name.toUpperCase();
-  const lastName = personalInfo.lastName.toUpperCase();
-
   const socials = [
     { name: "GitHub", url: personalInfo.github },
     { name: "LinkedIn", url: personalInfo.linkedin },
     { name: "LeetCode", url: personalInfo.leetcode },
-    { name: "Resume", url: personalInfo.resumeLink },
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-12 lg:px-16">
-      <GridBackground />
+    <section className="relative min-h-screen overflow-hidden">
+      <div className="absolute inset-0 atmosphere" />
+      <div className="absolute inset-0 topo-grid" />
 
-      <div className="w-full max-w-4xl mx-auto relative z-10 py-32">
-        <div className="flex flex-col items-center text-center">
-          
-          <ProfilePicture />
-
+      <div className="relative z-10 min-h-screen grid lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="flex flex-col justify-center px-6 md:px-10 lg:px-16 xl:px-20 py-28 lg:py-24">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mb-8"
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 mb-8 w-fit"
           >
-            <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent-emerald)] animate-pulse" />
-              Available for opportunities
+            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse-dot" />
+            <span className="section-label">
+              {personalInfo.title} · {personalInfo.company}
             </span>
           </motion.div>
 
-          <div className="mb-2 overflow-hidden">
-            <motion.h1
-              className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none"
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
-              <span className="text-[var(--text-primary)]">{firstName}</span>
-            </motion.h1>
-          </div>
-
-          <div className="mb-10 overflow-hidden">
-            <motion.h1
-              className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none text-gradient"
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              {lastName}
-            </motion.h1>
-          </div>
-
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.2, delay: 0.9 }}
-            className="w-24 h-[2px] mb-10 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
-          />
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-[clamp(3.2rem,9vw,6.5rem)] font-extrabold leading-[0.95] tracking-tight text-[var(--text-primary)] mb-1"
+          >
+            {personalInfo.name}
+          </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-[clamp(3.2rem,9vw,6.5rem)] font-extrabold leading-[0.95] tracking-tight text-[var(--accent)] mb-8"
+          >
+            {personalInfo.lastName}
+          </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
-            className="text-xl md:text-2xl text-[var(--text-secondary)] mb-6 max-w-xl font-light leading-relaxed"
+            transition={{ delay: 0.35, duration: 0.55 }}
+            className="max-w-md text-lg md:text-xl text-[var(--text-secondary)] mb-3"
           >
             {personalInfo.tagline}
           </motion.p>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.6 }}
-            className="text-[var(--text-muted)] mb-8 text-base md:text-lg"
+            transition={{ delay: 0.45, duration: 0.55 }}
+            className="max-w-lg text-[var(--text-muted)] mb-10"
           >
-            {personalInfo.title} @ <span className="text-[var(--accent)]">{personalInfo.company}</span>
-            <span className="mx-3 text-[var(--border-light)]">·</span>
-            {personalInfo.location}
+            {personalInfo.bio}
           </motion.p>
 
-          <motion.a
-            href={`mailto:${personalInfo.email}`}
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-            className="inline-block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mb-10 underline-animation font-mono text-sm"
+            transition={{ delay: 0.55, duration: 0.55 }}
+            className="flex flex-wrap gap-3 mb-12"
           >
-            {personalInfo.email}
-          </motion.a>
+            <a href="#projects" className="cta-primary">
+              View Projects
+            </a>
+            <a href="#contact" className="cta-ghost">
+              Get in Touch
+            </a>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3, duration: 0.6 }}
-            className="flex justify-center flex-wrap gap-6 md:gap-10 mb-14"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="flex flex-wrap items-center gap-x-6 gap-y-3"
           >
-            {socials.map((social, index) => (
-              <motion.a
-                key={social.name}
-                href={social.url}
+            {socials.map((s) => (
+              <a
+                key={s.name}
+                href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="social-link text-xs uppercase tracking-[0.2em] text-[var(--text-muted)] hover:text-[var(--accent)]"
-                whileHover={{ y: -4 }}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 + index * 0.1 }}
+                className="ink-link font-mono text-xs uppercase tracking-[0.18em]"
               >
-                {social.name}
-              </motion.a>
+                {s.name}
+              </a>
             ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.7, duration: 0.6 }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
-          >
-            <motion.a
-              href="#projects"
-              className="group relative px-10 py-5 rounded-full overflow-hidden"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-secondary)] opacity-90 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10 font-display text-sm uppercase tracking-[0.15em] text-white font-medium">
-                View Projects
-              </span>
-            </motion.a>
-
-            <motion.a
-              href="#work"
-              className="px-10 py-5 rounded-full border border-[var(--border)] text-[var(--text-secondary)] font-display text-sm uppercase tracking-[0.15em] hover:border-[var(--border-light)] hover:text-[var(--text-primary)] transition-all"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Experience
-            </motion.a>
+            <span className="hidden sm:inline text-[var(--line-strong)]">/</span>
+            <span className="font-mono text-xs text-[var(--text-muted)]">{personalInfo.location}</span>
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="relative min-h-[48vh] lg:min-h-screen border-t lg:border-t-0 lg:border-l border-[var(--line)]"
+        >
+          <Image
+            src="/profile.jpg"
+            alt="Ashutosh Dubey"
+            fill
+            priority
+            unoptimized
+            className="object-cover object-[center_20%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent lg:bg-gradient-to-r lg:from-[var(--bg-primary)]/35 lg:via-transparent lg:to-transparent" />
+        </motion.div>
       </div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-          className="flex flex-col items-center gap-3"
-        >
-          <span className="text-[var(--text-dim)] text-[10px] uppercase tracking-[0.3em]">Scroll</span>
-          <div className="w-[1px] h-10 bg-gradient-to-b from-[var(--text-dim)] to-transparent" />
-        </motion.div>
-      </motion.div>
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ delay: 1, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute bottom-0 left-0 right-0 h-[2px] origin-left bg-gradient-to-r from-[var(--accent)] via-[var(--ember)] to-transparent"
+      />
     </section>
   );
 }
